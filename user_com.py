@@ -31,7 +31,10 @@ def registration(user_id, name_, link_, link_name): #Регистрация но
     cursor.close()
     conn.close()
     if flag == True:
-        invite_plus(int(link_name))
+        try:
+            invite_plus(int(link_name))
+        except:
+            pass
         return 'Я смотрю, ты новенький! Добро пожаловать!'
     else:
         return ''
