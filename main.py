@@ -318,7 +318,7 @@ def alse(message):
         bot.register_next_step_handler(sent, question)
     elif message.text == 'Рефералы':
         info = user_com.info(message.from_user.id)
-        bot.send_message(message.from_user.id, 'За каждого приведенного реферала, который пополнит баланс, вам начислится 0,0005 BTC \n Это ваша реферальная ссылка: http://t.me/testbitcoinkifirbot?start=' + str(info[3]) + ' . \n Ваши рефералы: ' + str(info[5]))
+        bot.send_message(message.from_user.id, 'За каждого приведенного реферала, который пополнит баланс, вам начислится 0,0005 BTC \n Это ваша реферальная ссылка: http://t.me/Btc_winbot?start=' + str(info[3]) + ' . \n Ваши рефералы: ' + str(info[5]))
         message.text = 'start'
         start_one(message)
 
