@@ -165,6 +165,15 @@ def parse(arg): # парсинг сайта
         soup = BeautifulSoup(r, "html.parser")
         table = soup.find('span', class_='h2 text-semi-bold details-panel-item--price__value').text
         return table
+    elif arg == 'All':
+        url = 'https://coinmarketcap.com/'
+        r = urllib.request.urlopen(url).read()
+        soup = BeautifulSoup(r, "html.parser")
+        table = soup.find_all('td', class_='no-wrap text-right')
+        write = []
+        for i in table:
+            write.append(i.text[2:-2:])
+        return  write[:14:2]
     else:
         conn = sqlite3.connect('base.db')
         cursor = conn.cursor()
@@ -175,7 +184,6 @@ def parse(arg): # парсинг сайта
         cursor.close()
         conn.close()
         parse(write)
-
 
 
 
@@ -214,15 +222,10 @@ def more_less(user_id, moree, money,valume):
     cursor = conn.cursor()
     cursor.execute('UPDATE users SET status=:money , more_less=:moree, valume=:valume WHERE id=:user_id',
                    {'money': money, 'moree': moree, 'valume': valume, 'user_id': user_id})
-
-    cursor.execute('SELECT time_ FROM users WHERE id=:user_id',
-                   {'user_id': user_id})
-    write = cursor.fetchone()
     conn.commit()
     cursor.close()
     conn.close()
 
-    return write
 
 def all_id():
     conn = sqlite3.connect('base.db')
@@ -234,5 +237,5 @@ def all_id():
     conn.commit()
     cursor.close()
     conn.close()
-
     return write
+
