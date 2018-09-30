@@ -1,10 +1,14 @@
 token = '572637496:AAEitWigXlgKarpFgOp_d_wUWVv5RcpYpJo'
 
-time = ['00:00', '3:00', '6:00', '9:00', '12:00', '15:00', '18:00', '21:00']
+time = ['00:00', '2:00', '4:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '23:08']
 
 admin = 286077227
 
+admin2 = 168720540
+
 valume = ''
+
+boole = False
 
 btc_list  = ['39G2uCXzpLHBtrxxvtsczWkG7yFm5NMy8g', '14p8j9J8Lg7AdxvUur35Mk5q268RQYKjcY', '33e5EpZF4SYW1MJUnpucz5yoFmfZX98sKk', '34sSUvbYfBHk9n4gKcqjs9omepysuCqpQR', '1BBh4d8A4C426WD6bfCqmmJwVSCqmvWJpz']
 
