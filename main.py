@@ -303,17 +303,17 @@ def pay_l(message):
         user_markup.row('4 Часа', '6 Часов')
         user_markup.row('12 Часов')
         user_markup.row('Назад')
-        sent = bot.send_message(message.from_user.id, 'Выберите удобное для вас время:', reply_markup=user_markup)
+        sent = bot.send_message(message.from_user.id, 'Выберите нужное вам время:', reply_markup=user_markup)
         bot.register_next_step_handler(sent, time_case)
     elif message.text == 'Меньше':
         money = float(user_com.parse(constants.valume))
-        user_com.more_less(message.from_user.id, 'less', money, constants.valume)
+        user_com.more_less(message.from_user.id, 'more', money, constants.valume)
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         user_markup.row('1 Час', '2 Часа')
         user_markup.row('4 Часа', '6 Часов')
         user_markup.row('12 Часов')
         user_markup.row('Назад')
-        sent = bot.send_message(message.from_user.id, 'Выберите удобное для вас время:', reply_markup=user_markup)
+        sent = bot.send_message(message.from_user.id, 'Выберите нужное вам время:', reply_markup=user_markup)
         bot.register_next_step_handler(sent, time_case)
     else:
         message.text = 'start'
