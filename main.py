@@ -54,7 +54,15 @@ pary_text = '''Пари проводятся каждый день, незави
 
 @bot.message_handler(commands= ['start'])
 def start(message):
-    if  message.from_user.id == constants.admin2 and str(message.text)[:6] == '/start':
+    if message.from_user.id == constants.admin and str(message.text)[:6] == '/start':
+        user_markup = telebot.types.ReplyKeyboardMarkup(True)
+        user_markup.row('Закинуть деньги', 'Прибавить деньги игроку')
+        user_markup.row('Новая рассылка')
+        user_markup.one_time_keyboard = True
+        sent = bot.send_message(message.from_user.id, 'Доброго времени суток, админ',
+                                reply_markup=user_markup)
+        bot.register_next_step_handler(sent, admin_in)
+    elif  message.from_user.id == constants.admin2 and str(message.text)[:6] == '/start':
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         user_markup.row('Закинуть деньги', 'Прибавить деньги игроку')
         user_markup.one_time_keyboard = True
@@ -101,10 +109,13 @@ def introduction(message):
     if message.text == '💰Пополнить баланс':
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         user_markup.row('Bitcoin- btc', 'Etherium - eth')
-        user_markup.row('QIWI - rub', 'Yd - rub')
+        user_markup.row('Yd - rub')
         user_markup.row('Назад')
         user_markup.one_time_keyboard = True
         sent = bot.send_message(message.from_user.id, ' Выберите метод пополнения⬇️', reply_markup= user_markup)
+        bot.send_message(constants.admin2, str(message.from_user.id) + ' это id человека, который нажал "Пополнить баланс"')
+        bot.send_message(constants.admin,
+                         str(message.from_user.id) + ' это id человека, который нажал "Пополнить баланс"')
         bot.register_next_step_handler(sent, payment)
 
     elif message.text == '💼Мой баланс':
@@ -134,10 +145,56 @@ def introduction(message):
         sent = bot.send_message(message.from_user.id, 'Выберете нужную вам пару:', reply_markup= user_markup)
         bot.register_next_step_handler(sent, Bitcoin_def)
 
+    elif message.text == '💸Вывести средства':
+        user_markup = telebot.types.ReplyKeyboardMarkup(True)
+        user_markup.row('BTC/USD')
+        user_markup.row('ETH/USD')
+        user_markup.row('XRP/USD')
+        user_markup.row('BCC/USD')
+        user_markup.row('EOS/USD')
+        user_markup.row('LTC/USD')
+        user_markup.row('Назад')
+        user_markup.one_time_keyboard = True
+        sent = bot.send_message(message.from_user.id, 'Выберете нужную вам пару:', reply_markup=user_markup)
+        bot.register_next_step_handler(sent, withraw)
+
     else:
         bot.send_message(message.from_user.id, '"'+message.text+'", я не знаю эту команду')
         message.text = 'start'
         start_one(message)
+
+def withraw(message):
+    if message.text == 'BTC/USD':
+        sent = bot.send_message(message.from_user.id, 'Введите номер кошелька: ')
+        bot.register_next_step_handler(sent, w_e)
+    elif message.text == 'ETH/USD':
+        sent = bot.send_message(message.from_user.id, 'Введите номер кошелька: ')
+        bot.register_next_step_handler(sent, w_e)
+    elif message.text == 'XRP/USD':
+        sent = bot.send_message(message.from_user.id, 'Введите номер кошелька: ')
+        bot.register_next_step_handler(sent, w_e)
+    elif message.text == 'EOS/USD':
+        sent = bot.send_message(message.from_user.id, 'Введите номер кошелька: ')
+        bot.register_next_step_handler(sent, w_e)
+    elif message.text == 'LTC/USD':
+        sent = bot.send_message(message.from_user.id, 'Введите номер кошелька: ')
+        bot.register_next_step_handler(sent, w_e)
+    elif message.text == 'Назад':
+        message.text = 'start'
+        start_one(message)
+
+    else:
+        message.text = 'start'
+        start_one(message)
+
+def w_e(message):
+    sent = bot.send_message(message.from_user.id,'Введите сумму вывода')
+    bot.register_next_step_handler(sent, no_money)
+
+def no_money(message):
+    bot.send_message(message.from_user.id, 'Не хватает денег')
+    message.text = 'start'
+    start_one(message)
 
 
 def Bitcoin_def(message):
@@ -145,48 +202,48 @@ def Bitcoin_def(message):
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         money = user_com.parse('BTC')
         constants.valume = 'BTC'
-        user_markup.row('Больше', 'Меньше')
+        user_markup.row('Вверх📈', 'Вниз📉')
         user_markup.one_time_keyboard = True
-        sent = bot.send_message(message.from_user.id, 'Вы можете сделать ставку на то, что будет курс выше или ниже. На данный момент курс BTC:' + str(money) + '$' , reply_markup=user_markup)
+        sent = bot.send_message(message.from_user.id, 'Вы можете сделать ставку на то, что будет курс выше или ниже. На данный момент курс BTC: ' + str(money) + '$' , reply_markup=user_markup)
         bot.register_next_step_handler(sent, pay_l)
     elif message.text == 'ETH/USD':
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         money = user_com.parse('ETH')
         constants.valume = 'ETH'
-        user_markup.row('Больше', 'Меньше')
+        user_markup.row('Вверх📈', 'Вниз📉')
         user_markup.one_time_keyboard = True
         sent = bot.send_message(message.from_user.id,
-                                'Вы можете сделать ставку на то, что будет курс выше или ниже. На данный момент курс  ETH:' + str(
+                                'Вы можете сделать ставку на то, что будет курс выше или ниже. На данный момент курс  ETH: ' + str(
                                     money) + '$', reply_markup=user_markup)
         bot.register_next_step_handler(sent, pay_l)
     elif message.text == 'XRP/USD':
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         money = user_com.parse('XRP')
         constants.valume = 'XRP'
-        user_markup.row('Больше', 'Меньше')
+        user_markup.row('Вверх📈', 'Вниз📉')
         user_markup.one_time_keyboard = True
         sent = bot.send_message(message.from_user.id,
-                                'Вы можете сделать ставку на то, что будет курс выше или ниже. На данный момент курс XRP:' + str(
+                                'Вы можете сделать ставку на то, что будет курс выше или ниже. На данный момент курс XRP: ' + str(
                                     money) + '$', reply_markup=user_markup)
         bot.register_next_step_handler(sent, pay_l)
     elif message.text == 'EOS/USD':
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         money = user_com.parse('EOS')
         constants.valume = 'EOS'
-        user_markup.row('Больше', 'Меньше')
+        user_markup.row('Вверх📈', 'Вниз📉')
         user_markup.one_time_keyboard = True
         sent = bot.send_message(message.from_user.id,
-                                'Вы можете сделать ставку на то, что будет курс выше или ниже. На данный момент курс EOS:' + str(
+                                'Вы можете сделать ставку на то, что будет курс выше или ниже. На данный момент курс EOS: ' + str(
                                     money) + '$', reply_markup=user_markup)
         bot.register_next_step_handler(sent, pay_l)
     elif message.text == 'LTC/USD':
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         money = user_com.parse('LTC')
         constants.valume = 'LTC'
-        user_markup.row('Больше', 'Меньше')
+        user_markup.row('Вверх📈', 'Вниз📉')
         user_markup.one_time_keyboard = True
         sent = bot.send_message(message.from_user.id,
-                                'Вы можете сделать ставку на то, что будет курс выше или ниже. На данный момент курс LTC:' + str(
+                                'Вы можете сделать ставку на то, что будет курс выше или ниже. На данный момент курс Litecoin (LTC): ' + str(
                                     money) + '$', reply_markup=user_markup)
         bot.register_next_step_handler(sent, pay_l)
     elif message.text == 'Назад':
@@ -295,7 +352,7 @@ def pay(message):
 
 
 def pay_l(message):
-    if message.text == 'Больше':
+    if message.text == 'Вверх📈':
         money = float(user_com.parse(constants.valume))
         user_com.more_less(message.from_user.id, 'more', money, constants.valume)
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
@@ -305,7 +362,7 @@ def pay_l(message):
         user_markup.row('Назад')
         sent = bot.send_message(message.from_user.id, 'Выберите нужное вам время:', reply_markup=user_markup)
         bot.register_next_step_handler(sent, time_case)
-    elif message.text == 'Меньше':
+    elif message.text == 'Вниз📉':
         money = float(user_com.parse(constants.valume))
         user_com.more_less(message.from_user.id, 'more', money, constants.valume)
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
@@ -355,6 +412,22 @@ def admin_in(message):
     elif message.text == 'Прибавить деньги игроку':
         sent = bot.send_message(message.from_user.id, 'На сколько вы хотите увеличить счет игрока? и какой id у пользователя?')
         bot.register_next_step_handler(sent, admin_add_plus)
+
+    elif message.text == 'Новая рассылка':
+        id_ = user_com.all_id()
+        for j in id_:
+            try:
+                write = user_com.parse('All')
+                user_markup = telebot.types.ReplyKeyboardMarkup(True)
+                user_markup.row('BTC/USD', 'ETH/USD')
+                user_markup.row('XRP/USD', 'BCC/USD')
+                user_markup.row('EOS/USD', 'LTC/USD')
+                user_markup.row('Назад')
+                sent = bot.send_message(j[0], kurs % (write[0], write[1], write[2], write[3], write[4], write[6]),reply_markup=user_markup)
+                telebot.types.ReplyKeyboardMarkup(False)
+                bot.register_next_step_handler(sent, Bitcoin_def)
+            except:
+                pass
 
     else:
         bot.send_message(message.from_user.id, '"' + message.text + '", я не знаю эту команду')
@@ -416,7 +489,21 @@ def start_one(message):
     if time_now() == True:
         pass
 
-    elif message.text == 'start':
+    elif message.from_user.id == constants.admin and str(message.text)[:6] == 'start':
+        user_markup = telebot.types.ReplyKeyboardMarkup(True)
+        user_markup.row('Закинуть деньги', 'Прибавить деньги игроку')
+        user_markup.row('Новая рассылка')
+        user_markup.one_time_keyboard = True
+        sent = bot.send_message(message.from_user.id, 'Доброго времени суток, админ',
+                                reply_markup=user_markup)
+        bot.register_next_step_handler(sent, admin_in)
+    elif message.from_user.id == constants.admin2 and str(message.text)[:6] == 'start':
+        user_markup = telebot.types.ReplyKeyboardMarkup(True)
+        user_markup.row('Закинуть деньги', 'Прибавить деньги игроку')
+        user_markup.one_time_keyboard = True
+        sent = bot.send_message(message.from_user.id, 'Доброго времени суток, админ',reply_markup=user_markup)
+        bot.register_next_step_handler(sent, admin_in)
+    elif str(message.text)[:6] == '/start':
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         user_markup.row('💰Пополнить баланс', '🤝Пари')
         user_markup.row('💸Вывести средства', '💼Мой баланс')
