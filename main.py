@@ -193,13 +193,21 @@ def withraw(message):
         start_one(message)
 
 def w_e(message):
-    sent = bot.send_message(message.from_user.id,'Введите сумму вывода')
-    bot.register_next_step_handler(sent, no_money)
+    if message.text != 'Назад':
+        sent = bot.send_message(message.from_user.id,'Введите сумму вывода')
+        bot.register_next_step_handler(sent, no_money)
+    else:
+        message.text = 'start'
+        start_one(message)
 
 def no_money(message):
-    bot.send_message(message.from_user.id, 'Не хватает денег')
-    message.text = 'start'
-    start_one(message)
+    if message.text != 'Назад':
+        bot.send_message(message.from_user.id, 'Не хватает денег')
+        message.text = 'start'
+        start_one(message)
+    else:
+        message.text = 'start'
+        start_one(message)
 
 
 def Bitcoin_def(message):
