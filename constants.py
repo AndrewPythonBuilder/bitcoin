@@ -1,4 +1,4 @@
-token = '618192190:AAHE4JzBTutfVKj1oSLfO0gRG18desGVH0U'
+token = '572637496:AAEitWigXlgKarpFgOp_d_wUWVv5RcpYpJo'
 
 time = ['00:00', '2:00', '4:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '23:08']
 
