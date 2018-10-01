@@ -16,13 +16,13 @@ LTC/USD - %s
 
 Вы можете сделать ставку на то, что будет курс выше или ниже.'''
 
-QIWI_text = '''Здесь вы можете пополнить баланс QIWI. 
+QIWI_text = '''Здесь вы можете пополнить баланс QIWI.
 Перечислите деньги на данный номер, и, в течение час деньги переведутся в игровую валюту
 При отправке, напишите свой id и ваш уникальных код перевода
 Ваш id - %s
 Ваш уникальный код перевода #%s'''
 
-Yandex_text = '''Здесь вы можете пополнить баланс ЯД. 
+Yandex_text = '''Здесь вы можете пополнить баланс ЯД.
 Перечислите деньги на данный номер, и, в течение час деньги переведутся в игровую валюту
 При отправке, напишите свой id и ваш уникальных код перевода
 Ваш id - %s
@@ -35,7 +35,7 @@ btc_text = '''Для пополнения BTC с внешнего кошельк
 
 hello_text = '''Привет! В данном боте мы предлагаем заключить тебе пари и угадать, куда пойдёт курс Биткоина «вниз» или «вверх».
 
-Если ты будешь прав мы начислим тебе 80% от твоей ставки. 
+Если ты будешь прав мы начислим тебе 80% от твоей ставки.
 
 К примеру ты поставил 1 BTC и верно угадал направление, в таком случае мы выплатим тебе 1,8 BTC, при этом курс мог изменится даже на 1$ в нужном тебе направлении.
 
@@ -49,7 +49,7 @@ ref_text = '''Кстати, у нас действует реферальная 
 Свою реферальную ссылку, ты можешь найти в разделе «Дополнительно»
 '''
 
-pary_text = '''Пари проводятся каждый день, независимо от курса. Баланс вы можете пополнить нажав на кнопку в меню. 
+pary_text = '''Пари проводятся каждый день, независимо от курса. Баланс вы можете пополнить нажав на кнопку в меню.
 '''
 
 @bot.message_handler(commands= ['start'])
@@ -82,6 +82,8 @@ def start(message):
         user_markup.one_time_keyboard = True
         sent = bot.send_message(message.from_user.id, hello_text + ref_text + pary_text + hello, reply_markup= user_markup)
         bot.register_next_step_handler(sent, introduction)
+    elif message.text == 'Назад':
+        pass
 
     s = user_com.o_clock()
     if s != []:
@@ -157,6 +159,9 @@ def introduction(message):
         user_markup.one_time_keyboard = True
         sent = bot.send_message(message.from_user.id, 'Выберете нужную вам пару:', reply_markup=user_markup)
         bot.register_next_step_handler(sent, withraw)
+
+    elif message.text == 'Назад':
+        pass
 
     else:
         bot.send_message(message.from_user.id, '"'+message.text+'", я не знаю эту команду')
@@ -360,6 +365,7 @@ def pay_l(message):
         user_markup.row('4 Часа', '6 Часов')
         user_markup.row('12 Часов')
         user_markup.row('Назад')
+        user_markup.one_time_keyboard = True
         sent = bot.send_message(message.from_user.id, 'Выберите нужное вам время:', reply_markup=user_markup)
         bot.register_next_step_handler(sent, time_case)
     elif message.text == 'Вниз📉':
@@ -370,6 +376,7 @@ def pay_l(message):
         user_markup.row('4 Часа', '6 Часов')
         user_markup.row('12 Часов')
         user_markup.row('Назад')
+        user_markup.one_time_keyboard = True
         sent = bot.send_message(message.from_user.id, 'Выберите нужное вам время:', reply_markup=user_markup)
         bot.register_next_step_handler(sent, time_case)
     else:
@@ -423,8 +430,9 @@ def admin_in(message):
                 user_markup.row('XRP/USD', 'BCC/USD')
                 user_markup.row('EOS/USD', 'LTC/USD')
                 user_markup.row('Назад')
+                user_markup.one_time_keyboard = True
                 sent = bot.send_message(j[0], kurs % (write[0], write[1], write[2], write[3], write[4], write[6]),reply_markup=user_markup)
-                telebot.types.ReplyKeyboardMarkup(False)
+
                 bot.register_next_step_handler(sent, Bitcoin_def)
             except:
                 pass
@@ -486,10 +494,7 @@ def start_one(message):
                     bot.send_message(info[0], 'Ставка не прошла')
             user_com.null(info[0])
 
-    if time_now() == True:
-        pass
-
-    elif message.from_user.id == constants.admin and str(message.text)[:6] == 'start':
+    if message.from_user.id == constants.admin and str(message.text)[:6] == 'start':
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         user_markup.row('Закинуть деньги', 'Прибавить деньги игроку')
         user_markup.row('Новая рассылка')
@@ -503,16 +508,16 @@ def start_one(message):
         user_markup.one_time_keyboard = True
         sent = bot.send_message(message.from_user.id, 'Доброго времени суток, админ',reply_markup=user_markup)
         bot.register_next_step_handler(sent, admin_in)
-    elif str(message.text)[:6] == '/start':
+    elif message.text == 'start':
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         user_markup.row('💰Пополнить баланс', '🤝Пари')
         user_markup.row('💸Вывести средства', '💼Мой баланс')
         user_markup.row('🔥Дополнительно')
         sent = bot.send_message(message.from_user.id, 'Чем еще могу помочь?' ,reply_markup=user_markup)
-        telebot.types.ReplyKeyboardMarkup(False)
+        user_markup.one_time_keyboard = True
         bot.register_next_step_handler(sent, introduction)
-    else:
-        introduction(message)
+    elif message.text == 'Назад':
+        pass
 
 
 def time_now():
@@ -528,7 +533,7 @@ def time_now():
                     user_markup.row('EOS/USD', 'LTC/USD')
                     user_markup.row('Назад')
                     sent = bot.send_message(j[0], kurs %(write[0], write[1], write[2], write[3], write[4], write[6]), reply_markup=user_markup)
-                    telebot.types.ReplyKeyboardMarkup(False)
+                    user_markup.one_time_keyboard = True
                     bot.register_next_step_handler(sent, Bitcoin_def)
                     constants.boole = False
                     return True
