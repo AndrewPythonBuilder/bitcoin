@@ -185,11 +185,6 @@ def parse(arg): # парсинг сайта
         conn.close()
         parse(write)
 
-
-parse('All')
-
-
-
 def invite_plus(user_id): # Рефералка
     conn = sqlite3.connect('base.db')
     cursor = conn.cursor()
