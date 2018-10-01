@@ -55,6 +55,11 @@ pary_text = '''Пари проводятся каждый день, незави
 @bot.message_handler(commands= ['start'])
 def start(message):
     if message.from_user.id == constants.admin and str(message.text)[:6] == '/start':
+        try:
+            link_name = str(message.text)[7:]
+        except:
+            link_name = ''
+        hello = user_com.registration(message.from_user.id, message.from_user.first_name, str(message.from_user.id), link_name)
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         user_markup.row('Закинуть деньги', 'Прибавить деньги игроку')
         user_markup.row('Новая рассылка')
@@ -63,6 +68,11 @@ def start(message):
                                 reply_markup=user_markup)
         bot.register_next_step_handler(sent, admin_in)
     elif  message.from_user.id == constants.admin2 and str(message.text)[:6] == '/start':
+        try:
+            link_name = str(message.text)[7:]
+        except:
+            link_name = ''
+        hello = user_com.registration(message.from_user.id, message.from_user.first_name, str(message.from_user.id), link_name)
         user_markup = telebot.types.ReplyKeyboardMarkup(True)
         user_markup.row('Закинуть деньги', 'Прибавить деньги игроку')
         user_markup.one_time_keyboard = True
