@@ -538,5 +538,3 @@ def time_now():
             constants.boole = True
 
 bot.polling(none_stop=True , timeout=30 )
-
-
