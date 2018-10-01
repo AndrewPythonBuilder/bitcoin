@@ -186,6 +186,7 @@ def parse(arg): # парсинг сайта
         parse(write)
 
 
+parse('All')
 
 
 
